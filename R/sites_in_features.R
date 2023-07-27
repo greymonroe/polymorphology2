@@ -37,10 +37,10 @@ sites_in_features <- function(features, sites, mode, value = NULL) {
 
   # Check if necessary columns exist in input data.tables
   required_cols <- c("CHROM", "START", "STOP", "ID")
-  if (any(setdiff(required_cols, colnames(features)))) {
+  if (length(setdiff(required_cols, colnames(features))) > 0) {
     stop(paste("The 'features' data.table must have", paste(required_cols, collapse = ", "), "columns."))
   }
-  if (any(setdiff(c("CHROM", "POS"), colnames(sites)))) {
+  if (length(setdiff(c("CHROM", "POS"), colnames(sites))) > 0) {
     stop("The 'sites' data.table must have 'CHROM' and 'POS' columns.")
   }
 
@@ -52,15 +52,15 @@ sites_in_features <- function(features, sites, mode, value = NULL) {
   # Check and remove 'ID' column from 'sites' if exists
   if ("ID" %in% colnames(sites)) {
     warning("The 'sites' data.table contains a column named 'ID'. This column will be removed.")
-    sites[, ID := NULL]
+    sites$ID<-NULL
   }
 
   # Check for CHROM values not found in the other data.table
-  if (any(unmatched <- setdiff(unique(sites$CHROM), unique(features$CHROM)))) {
+  if (length(unmatched <- setdiff(unique(sites$CHROM), unique(features$CHROM))) > 0) {
     warning("The following CHROM values in 'sites' are not found in 'features': ",
             paste(unmatched, collapse = ", "), ".")
   }
-  if (any(unmatched <- setdiff(unique(features$CHROM), unique(sites$CHROM)))) {
+  if (length(unmatched <- setdiff(unique(features$CHROM), unique(sites$CHROM))) > 0) {
     warning("The following CHROM values in 'features' are not found in 'sites': ",
             paste(unmatched, collapse = ", "), ".")
   }

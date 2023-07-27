@@ -34,7 +34,7 @@ plot_feature_windows <- function(feature_windows, variable, mode) {
   }
 
   if (mode == "mean") {
-    summary <- feature_windows[, .(y = mean(get(variable))), by = .(REGION, RELATIVEPOS)]
+    summary <- feature_windows[, .(y = mean(get(variable), na.rm=T)), by = .(REGION, RELATIVEPOS)]
   } else if (mode == "percent") {
     summary <- feature_windows[, .(y = sum(get(variable)) / sum(LENGTH)), by = .(REGION, RELATIVEPOS)]
   }

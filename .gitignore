@@ -3,3 +3,5 @@
 .RData
 .Ruserdata
 R/tests.R
+SANDBOX.R
+.DS_Store
