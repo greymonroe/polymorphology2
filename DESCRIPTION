@@ -10,7 +10,8 @@ Description: This package provides an assortment of wrapper functions
     and epigenome enrichments in genome features.
 License: Unlimited
 Encoding: UTF-8
-Imports: 
+Depends: 
+    R (>= 3.6.0),
     data.table,
     ggplot2,
     seqinr,
