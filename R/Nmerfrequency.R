@@ -9,9 +9,7 @@
 #'
 #' @return A `data.table` containing the frequency of each N-mer for each genomic feature.
 #' @export
-#'
-#' @examples
-#' Nmerfrequency(features, fasta, Nmer = 2, mode = "prop")
+
 
 Nmerfrequency <- function(features, fasta, Nmer, mode = "prop") {
 

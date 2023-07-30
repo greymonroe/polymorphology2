@@ -21,6 +21,3 @@ A `data.table` containing the frequency of each N-mer for each genomic feature.
 \description{
 Calculate the frequency of N-mers in given genomic features.
 }
-\examples{
-Nmerfrequency(features, fasta, Nmer = 2, mode = "prop")
-}

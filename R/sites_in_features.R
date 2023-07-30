@@ -51,7 +51,6 @@ sites_in_features <- function(features, sites, mode, value = NULL) {
 
   # Check and remove 'ID' column from 'sites' if exists
   if ("ID" %in% colnames(sites)) {
-    warning("The 'sites' data.table contains a column named 'ID'. This column will be removed.")
     sites$ID<-NULL
   }
 
