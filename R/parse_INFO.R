@@ -13,20 +13,32 @@
 #' @import data.table
 #' @export
 parse_INFO <- function(INFO) {
-  # Split the INFO string by semicolons to separate the key-value pairs
-  key_values <- unlist(strsplit(INFO, split = ";"))
+  # Split the INFO string by semicolons to get potential key-value pairs
+  INFO<-gsub("\\(source=","source", INFO)
+  potential_key_values <- unlist(strsplit(INFO, split = ";"))
 
-  # Extract the values from the key-value pairs
-  parsed_item <- sapply(key_values, function(x) unlist(strsplit(x, split = "="))[2])
+  # Initialize variables for keys and values
+  keys <- vector("character")
+  values <- vector("character")
 
-  # Extract the keys from the key-value pairs
-  col_names <- sapply(key_values, function(x) unlist(strsplit(x, split = "="))[1])
+  # Iterate through potential key-value pairs
+  for (item in potential_key_values) {
+    if (grepl("=", item)) {
+      # Split by equal sign to extract key and value
+      kv <- unlist(strsplit(item, split = "="))
+      keys <- c(keys, kv[1])
+      values <- c(values, kv[2])
+    } else {
+      # Append item to the last value if no equal sign is found
+      values[length(values)] <- paste(values[length(values)], item, sep = ";")
+    }
+  }
 
-  # Create a data table with the parsed key-value pairs
-  result <- data.table::data.table(t(parsed_item))
+  # Create a data table with the parsed keys and values
+  result <- data.table::data.table(t(values))
 
   # Set the column names of the data table to the extracted keys
-  data.table::setnames(result, col_names)
+  data.table::setnames(result, keys)
 
   return(result)
 }

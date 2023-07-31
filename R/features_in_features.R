@@ -53,7 +53,6 @@ features_in_features <- function(features, features2, mode, value = NULL) {
 
   # Remove 'LENGTH' column from 'features' if it exists
   if ("LENGTH" %in% names(features)) {
-    message("'LENGTH' column exists in the 'features' data.table and will be removed to avoid potential overlap with feature2 calculation.")
     features$LENGTH <-NULL
   }
 
