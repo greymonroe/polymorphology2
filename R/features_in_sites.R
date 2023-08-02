@@ -37,7 +37,6 @@ features_in_sites <- function(features, sites) {
 
   # If 'features' contains 'ID', remove it
   if ("ID" %in% colnames(features)) {
-    warning("'features' data.table contains 'ID'. This column will be removed.")
     features[, ID := NULL]
   }
 

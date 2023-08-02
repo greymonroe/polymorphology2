@@ -41,14 +41,19 @@ features_in_features <- function(features, features2, mode, value = NULL) {
 
   # Check if necessary columns exist in input data.tables
   required_cols <- c("CHROM", "START", "STOP", "ID")
-  if (any(setdiff(required_cols, colnames(features))) |
-      any(setdiff(c("CHROM", "START", "STOP"), colnames(features2)))) {
+  if (length(setdiff(required_cols, colnames(features))) > 0 |
+      length(setdiff(c("CHROM", "START", "STOP"), colnames(features2))) > 0) {
     stop("The 'features' data.table must have 'CHROM', 'START', 'STOP', and 'ID' columns. 'features2' data.table must have 'CHROM', 'START', and 'STOP' columns.")
   }
 
   # Check if ID column in the features data.table contains unique values
   if (anyDuplicated(features[["ID"]]) > 0) {
     warning("The 'ID' column in the 'features' data.table must contain unique values.")
+  }
+
+  # If 'features' contains 'ID', remove it
+  if ("ID" %in% colnames(features2)) {
+    features2[, ID := NULL]
   }
 
   # Remove 'LENGTH' column from 'features' if it exists
