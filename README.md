@@ -1,7 +1,7 @@
 # polymorphology2
 
 ## Overview
-`polymorphology2` is an R package offering a variety of wrapper functions to efficiently handle genomic data. The primary focus of these functions is to enable the analysis of polymorphisms in the context of various genome features, such as gene bodies, epigenome enrichments, and SBS mutation profiles. 
+`polymorphology2` is an R package offering a general toolkit to efficiently handle genomic data. The primary focus of these functions is to enable the analysis of polymorphisms in the context of various genome features, such as gene bodies, epigenome enrichments, and SBS mutation profiles. 
 
 This package provides critical functionalities for identifying overlaps between genome features, and sites and features, with capabilities like calculating the distribution of sites across all genome features. It encompasses various functions routinely used by our lab, including filtering somatic mutations identified by strelka2, constructing windows around genome features like genes, and evaluating the enrichment of ChIPseq experiments in specific genome features.
 
