@@ -84,7 +84,7 @@ feature_windows <- function(features, breaks, dist, directed, IDcol){
   }), fill=TRUE)
 
   # Close progress bar
-  close(pb)
+  #close(pb)
 
   # Add 'ID' column
   windows[, ID := 1:.N]
