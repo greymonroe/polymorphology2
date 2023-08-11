@@ -15,7 +15,7 @@
 #' @export
 #' @examples
 #' # Ensure features is a data.table with proper structure before using this function.
-feature_windows <- function(features, breaks, directed, IDcol){
+feature_windows <- function(features, breaks, dist, directed, IDcol){
 
   # Check if features is a data.table
   if (!is.data.table(features)){
@@ -42,20 +42,20 @@ feature_windows <- function(features, breaks, directed, IDcol){
   }
 
   # Create progress bar
-  pb <- txtProgressBar(min = 0, max = nrow(features), style = 3)
+  #pb <- txtProgressBar(min = 0, max = nrow(features), style = 3)
 
   windows <- rbindlist(apply(features, 1, function(x) {
 
     # Update progress bar
-    setTxtProgressBar(pb, which(features[[IDcol]] == x[IDcol]))
+    #setTxtProgressBar(pb, which(features[[IDcol]] == x[IDcol]))
 
     chrom = x["CHROM"]
     body_starts = round(seq(as.numeric(x["START"]), as.numeric(x["STOP"]), length.out=breaks+1)[-(breaks+1)])
     body_stops = round(seq(as.numeric(x["START"]), as.numeric(x["STOP"]), length.out=breaks+1)[-1])
-    upstream_starts = seq(as.numeric(x["START"])-2000, as.numeric(x["START"]), length.out=breaks+1)[-(breaks+1)]
-    upstream_stops = seq(as.numeric(x["START"])-2000, as.numeric(x["START"]), length.out=breaks+1)[-1]
-    downstream_starts = seq(as.numeric(x["STOP"]), as.numeric(x["STOP"])+2000, length.out=breaks+1)[-(breaks+1)]
-    downstream_stops = seq(as.numeric(x["STOP"]), as.numeric(x["STOP"])+2000, length.out=breaks+1)[-1]
+    upstream_starts = seq(as.numeric(x["START"])-dist, as.numeric(x["START"]), length.out=breaks+1)[-(breaks+1)]
+    upstream_stops = seq(as.numeric(x["START"])-dist, as.numeric(x["START"]), length.out=breaks+1)[-1]
+    downstream_starts = seq(as.numeric(x["STOP"]), as.numeric(x["STOP"])+dist, length.out=breaks+1)[-(breaks+1)]
+    downstream_stops = seq(as.numeric(x["STOP"]), as.numeric(x["STOP"])+dist, length.out=breaks+1)[-1]
 
     out = data.table(
       CHROM = x["CHROM"],

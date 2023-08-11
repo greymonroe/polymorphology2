@@ -42,7 +42,7 @@ Both sites and features can incorporate other columns, which can be leveraged fo
 Future updates will include:
 
 - Parsing (extract GT, DP, etc into columns) for VCF files with particular formats (e.g., variants identified with DeepVariant, Strelka2, pbsv, HaplotypeCaller) and additional functions for VCFs with multiple samples. 
-- Nmer nucleotide frequencies across entire genome or genome features
+- Nmer amino acid frequencies across protein sequence
 - Addition of user tutorials for a more comprehensive understanding of package usage and functionalities.
 
 ## Dependencies

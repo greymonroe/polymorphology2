@@ -46,6 +46,11 @@ features_in_features <- function(features, features2, mode, value = NULL) {
     stop("The 'features' data.table must have 'CHROM', 'START', 'STOP', and 'ID' columns. 'features2' data.table must have 'CHROM', 'START', and 'STOP' columns.")
   }
 
+  # Check if value is NULL when mode is "sum" or "sumxlength"
+  if (mode %in% c("sum", "sumxlength") && is.null(value)) {
+    stop("When mode is 'sum' or 'sumxlength', the 'value' parameter must be specified to indicate which column in 'features2' to calculate the sum.")
+  }
+
   # Check if ID column in the features data.table contains unique values
   if (anyDuplicated(features[["ID"]]) > 0) {
     warning("The 'ID' column in the 'features' data.table must contain unique values.")
@@ -70,6 +75,18 @@ features_in_features <- function(features, features2, mode, value = NULL) {
 
   features$CHROM<-as.character(features$CHROM)
   features2$CHROM<-as.character(features2$CHROM)
+
+  # Check for missing CHROM values in features and features2
+  missing_chroms_in_features2 <- setdiff(unique(features$CHROM), unique(features2$CHROM))
+  missing_chroms_in_features <- setdiff(unique(features2$CHROM), unique(features$CHROM))
+
+  if (length(missing_chroms_in_features2) > 0) {
+    warning(paste("CHROM values in 'features' not found in 'features2':", paste(missing_chroms_in_features2, collapse = ", ")))
+  }
+
+  if (length(missing_chroms_in_features) > 0) {
+    warning(paste("CHROM values in 'features2' not found in 'features':", paste(missing_chroms_in_features, collapse = ", ")))
+  }
 
   # Set keys for efficient joining
   setkey(features, CHROM, START, STOP)
