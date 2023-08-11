@@ -4,22 +4,36 @@
 \alias{motif_hunter}
 \title{Motif Hunter in Fasta Object}
 \usage{
-motif_hunter(fasta, motif)
+motif_hunter(fasta, motif, reverse_complement)
 }
 \arguments{
 \item{fasta}{A fasta object as read by read.fasta from the seqinr package in R. Must be a list.}
 
-\item{motif}{A DNA sequence. Can be upper or lower case but needs to match the case of the fasta object.}
+\item{motif}{A DNA sequence, which can include IUPAC ambiguous nucleotide codes. Automatically converted to upper case.}
+
+\item{reverse_complement}{Logical. If TRUE, the function will also search for the reverse complement of the motif.}
 }
 \value{
-A data.table with locations of the motif within the fasta object.
+A data.table with locations of the motif within the fasta object. If ambiguous nucleotides are used in the motif, an additional column 'MOTIF' will specify which version of the motif was found.
 }
 \description{
 This function hunts for a specified DNA sequence motif in a given fasta object.
 The fasta object must match the case (upper vs lower) of the motif.
 }
+\details{
+When ambiguous nucleotides (IUPAC codes) are included in the motif, the function
+expands the motif into all possible combinations based on these codes and searches
+for each combination in the fasta object. If the `reverse_complement` parameter is set to TRUE,
+the function will also search for the reverse complement of each motif. The result
+will include an additional column, 'MOTIF', to specify which version of the expanded
+motif (or its reverse complement) was found.
+}
 \examples{
 # Ensure fasta object and motif are properly structured before using this function.
-# motif_hunter(fasta, motif)
+# motif_hunter(fasta, motif, reverse_complement = TRUE)
 
 }
+\seealso{
+\code{\link[data.table]{data.table}}, \code{\link[seqinr]{read.fasta}}, IUPAC nucleotide code
+}
+\keyword{genomics}

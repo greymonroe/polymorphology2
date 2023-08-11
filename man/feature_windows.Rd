@@ -4,7 +4,7 @@
 \alias{feature_windows}
 \title{Create windows around genome features}
 \usage{
-feature_windows(features, breaks, directed, IDcol)
+feature_windows(features, breaks, dist, directed, IDcol)
 }
 \arguments{
 \item{features}{A data.table with CHROM START and STOP columns. If directed=T,
