@@ -1,5 +1,7 @@
 # polymorphology2
 
+update
+
 ## Overview
 `polymorphology2` is an R package offering a general toolkit to efficiently handle genomic data. The primary focus of these functions is to enable the analysis of polymorphisms in the context of various genome features, such as gene bodies, epigenome enrichments, and SBS mutation profiles. 
 
