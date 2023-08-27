@@ -10,7 +10,7 @@ features_in_sites(features, sites)
 \item{features}{A data.table containing genomic features. Must include "CHROM", "START", and "STOP" columns.
 If an "ID" column is present, it will be removed.}
 
-\item{sites}{A data.table of sites (mutations). Must include "CHROM", "POSITION", and "ID" columns.}
+\item{sites}{A data.table of sites (mutations). Must include "CHROM", "POS", and "ID" columns.}
 }
 \value{
 A data.table indicating whether each site (identified by "ID") overlaps with any feature.
@@ -18,13 +18,13 @@ A data.table indicating whether each site (identified by "ID") overlaps with any
 \description{
 This function identifies whether sites from a provided data.table overlap with given genomic features.
 The function expects "CHROM", "START", and "STOP" columns in the features data.table, and
-"CHROM", "POSITION", and "ID" columns in the sites data.table.
+"CHROM", "POS", and "ID" columns in the sites data.table.
 }
 \examples{
 # Ensure that features and sites data.tables are properly structured before using this function.
 # Example:
 # features <- data.table(CHROM = c("chr1", "chr1", "chr2"), START = c(1, 100, 200), STOP = c(50, 150, 250))
-# sites <- data.table(CHROM = c("chr1", "chr1", "chr2"), POSITION = c(25, 125, 225), ID = c("site1", "site2", "site3"))
+# sites <- data.table(CHROM = c("chr1", "chr1", "chr2"), POS = c(25, 125, 225), ID = c("site1", "site2", "site3"))
 # features_in_sites(features, sites)
 
 }
