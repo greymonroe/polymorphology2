@@ -6,7 +6,7 @@
 #'
 #' @param features A data.table with CHROM START and STOP columns. If directed=T,
 #' it must contain a DIRECTION column.
-#' @param breaks The number of windows to break the feature into.
+#' @param width The size of windows to break the feature into.
 #' @param dist distance from start and stop to make windows upstream and downstream
 #' @param directed Logical. If TRUE, directionality of features is considered.
 #' @param IDcol Column name in features data.table used to identify the feature.
@@ -16,7 +16,7 @@
 #' @export
 #' @examples
 #' # Ensure features is a data.table with proper structure before using this function.
-feature_windows <- function(features, breaks, dist, directed, IDcol){
+feature_windows_width <- function(features, width, dist, directed, IDcol){
 
   # Check if features is a data.table
   if (!is.data.table(features)){
@@ -51,12 +51,12 @@ feature_windows <- function(features, breaks, dist, directed, IDcol){
     #setTxtProgressBar(pb, which(features[[IDcol]] == x[IDcol]))
 
     chrom = x["CHROM"]
-    body_starts = round(seq(as.numeric(x["START"]), as.numeric(x["STOP"]), length.out=breaks+1)[-(breaks+1)])
-    body_stops = round(seq(as.numeric(x["START"]), as.numeric(x["STOP"]), length.out=breaks+1)[-1])
-    upstream_starts = seq(as.numeric(x["START"])-dist, as.numeric(x["START"]), length.out=breaks+1)[-(breaks+1)]
-    upstream_stops = seq(as.numeric(x["START"])-dist, as.numeric(x["START"]), length.out=breaks+1)[-1]
-    downstream_starts = seq(as.numeric(x["STOP"]), as.numeric(x["STOP"])+dist, length.out=breaks+1)[-(breaks+1)]
-    downstream_stops = seq(as.numeric(x["STOP"]), as.numeric(x["STOP"])+dist, length.out=breaks+1)[-1]
+    body_starts = head(seq(as.numeric(x["START"]), as.numeric(x["STOP"]), by=width), -1)
+    body_stops = tail(seq(as.numeric(x["START"]), as.numeric(x["STOP"]),  by=width),-1)
+    upstream_starts = head(seq(as.numeric(x["START"])-dist, as.numeric(x["START"]),  by=width), -1)
+    upstream_stops = tail(seq(as.numeric(x["START"])-dist, as.numeric(x["START"]),  by=width), -1)
+    downstream_starts = head(seq(as.numeric(x["STOP"]), as.numeric(x["STOP"])+dist, by=width), -1)
+    downstream_stops = tail(seq(as.numeric(x["STOP"]), as.numeric(x["STOP"])+dist, by=width), -1)
 
     out = data.table(
       CHROM = x["CHROM"],
@@ -69,7 +69,9 @@ feature_windows <- function(features, breaks, dist, directed, IDcol){
 
     out[, (IDcol) := x[IDcol]]
 
-    out$RELATIVEPOS <- 1:nrow(out)
+    breaks=dist/width
+    gene_positions<-round(seq(breaks+1, breaks+breaks, length.out=length(body_starts) ))
+    out$RELATIVEPOS <- c(1:breaks, gene_positions, ((breaks*2)+1):(breaks*3))
     out$LENGTH <- out$STOP - out$START
 
     if(directed == T){

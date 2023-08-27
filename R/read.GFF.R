@@ -18,8 +18,10 @@ read.GFF <- function(file_path) {
     stop("File does not exist")
   }
 
+  cmd_string <- paste0("grep -v '^#' ", file_path)
+
   # Read the file
-  dt <- data.table::fread(file_path, header = FALSE)
+  dt <- data.table::fread(cmd = cmd_string, header = FALSE)
   # Check the number of columns
   if(ncol(dt) != 9){
     stop("Unexpected number of columns in the GFF file")

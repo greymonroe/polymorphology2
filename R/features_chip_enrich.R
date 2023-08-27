@@ -32,7 +32,7 @@ features_chip_enrich <- function(features, chipfile, inputfile) {
 
   message("Checking if chromosome names match in all objects...")
   if (!all(unique(features$CHROM) %in% unique(chip$CHROM)) | !all(unique(features$CHROM) %in% unique(input$CHROM))) {
-    stop("Chromosome names in 'features', 'chip', and 'input' must match.")
+    warning("Chromosome names in 'features', 'chip', and 'input' have mismatches.")
   }
 
   message("Calculating overlap of features with input...")
