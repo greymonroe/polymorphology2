@@ -1,21 +1,22 @@
 Package: polymorphology2
 Type: Package
-Title: Genomic Data Analysis Using Polymorphisms
+Title: Toolkit for Genomic Data Analysis
 Version: 0.1.0
 Author: Grey Monroe
 Maintainer: Grey Monroe <greymonroe@gmail.com>
-Description: This package provides an assortment of wrapper functions 
-    for working with genomic data. It enables analysis of polymorphisms 
-    in relation to genome features such as gene bodies, SBS profiles of mutations, 
-    and epigenome enrichments in genome features.
-License: Unlimited
+Description: Provides wrapper functions for genomic data analysis, enabling the study of polymorphisms in relation to genome features such as gene bodies, SBS profiles of mutations, and epigenome enrichments.
+License: GPL-3
 Encoding: UTF-8
-Depends: 
-    R (>= 3.6.0),
+Imports: 
     data.table,
     ggplot2,
     seqinr,
     vcfR,
-    stringr
+    stringr,
+    Hmisc
+Depends: 
+    R (>= 3.6.0)
 LazyData: true
 RoxygenNote: 7.2.3
+URL: https://github.com/greymonroe/polymorphology2 
+BugReports: https://github.com/greymonroe/polymorphology2/issues 
