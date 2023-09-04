@@ -28,7 +28,7 @@ read.GFF <- function(file_path) {
   }
 
   # Assign column names
-  colnames(dt) <- c("CHROM","SOURCE","TYPE","START","STOP","SCORE","DIRECTION","PHASE","INFO")
+  colnames(dt)[1:9] <- c("CHROM","SOURCE","TYPE","START","STOP","SCORE","DIRECTION","PHASE","INFO")
 
   # Check if START and STOP columns are numeric
   if(!is.numeric(dt$START) | !is.numeric(dt$STOP)){

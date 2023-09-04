@@ -16,6 +16,9 @@
 #' @importFrom data.table .N
 #' @importFrom Hmisc cut2
 #'
+#'
+#' @export
+#'
 #' @examples
 #' \dontrun{
 #' library(data.table)

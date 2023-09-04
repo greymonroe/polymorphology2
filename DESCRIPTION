@@ -7,15 +7,14 @@ Maintainer: Grey Monroe <greymonroe@gmail.com>
 Description: Provides wrapper functions for genomic data analysis, enabling the study of polymorphisms in relation to genome features such as gene bodies, SBS profiles of mutations, and epigenome enrichments.
 License: GPL-3
 Encoding: UTF-8
-Imports: 
+Depends: 
+    R (>= 3.6.0),
     data.table,
     ggplot2,
     seqinr,
     vcfR,
     stringr,
     Hmisc
-Depends: 
-    R (>= 3.6.0)
 LazyData: true
 RoxygenNote: 7.2.3
 URL: https://github.com/greymonroe/polymorphology2 
