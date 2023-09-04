@@ -4,7 +4,7 @@
 \alias{plot_bins}
 \title{plot_bins Function}
 \usage{
-plot_bins(data, yvar, xvar, bins)
+plot_bins(data, yvar, xvar, bins, xaxis = "numeric")
 }
 \arguments{
 \item{data}{A data.table containing the data.}
@@ -14,12 +14,14 @@ plot_bins(data, yvar, xvar, bins)
 \item{xvar}{Character name of the column in data to be used as the x-variable.}
 
 \item{bins}{Number of bins to divide the x-variable into.}
+
+\item{xaxis}{Type of x-axis to be used in the plot. Either "bins" or "numeric".}
 }
 \value{
 A list containing the binned data and the ggplot object.
 }
 \description{
-This function takes a data.table, two column names, and a number of bins as input.
+This function takes a data.table, two column names, a number of bins, and an x-axis type as input.
 It then calculates the mean and standard error of the y-variable for each bin of the x-variable.
 Finally, it returns a ggplot object showing the binned data.
 }
@@ -27,8 +29,8 @@ Finally, it returns a ggplot object showing the binned data.
 \dontrun{
 library(data.table)
 dt <- data.table(enrich = rnorm(100), g1001 = rnorm(100))
-result <- plot_bins(dt, "g1001", "enrich", 10)
-print(result[[2]])
+result <- plot_bins(dt, "g1001", "enrich", 10, "bins")
+print(result$plot)
 }
 
 }
