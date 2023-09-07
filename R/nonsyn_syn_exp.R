@@ -38,7 +38,7 @@ nonsyn_syn_exp <- function(muts, CDS, reps, n) {
 
   results <- list()
 
-  all_results <- list(reps=list(), ratio=numeric())
+  all_results <- list(simmuts=list(), reps=list(), ratio=numeric())
 
   for (rep in 1:reps) {
     message(rep)
@@ -88,6 +88,7 @@ nonsyn_syn_exp <- function(muts, CDS, reps, n) {
 
     ns_s_rate <- table(final_results$difference)[2]/table(final_results$difference)[1]
 
+    all_results$simmuts[[rep]] <-  final_results
     all_results$reps[[rep]] <-  wide_ns_s
     all_results$ratio[rep] = ns_s_rate
   }
