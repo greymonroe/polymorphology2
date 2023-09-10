@@ -14,7 +14,8 @@ Depends:
     seqinr,
     vcfR,
     stringr,
-    Hmisc
+    Hmisc,
+    randomForest
 LazyData: true
 RoxygenNote: 7.2.3
 URL: https://github.com/greymonroe/polymorphology2 

@@ -15,9 +15,16 @@
 #' muts <- fread("~/Dropbox/Research/rice mutation paper/data/Strelka2_mutations.csv")[trt=="MSH6"]
 #' CDS <- read.fasta("~/Documents/TAIR10_cds_20110103_representative_gene_model_updated.txt")
 #' result <- nonsyn_syn_exp(muts, CDS, 10, 1000)
+#'
 nonsyn_syn_exp <- function(muts, CDS, reps, n) {
 
   nucleotides <- c("A", "T", "C", "G")
+
+
+  amino_acids <- c("G", "A", "V", "L", "I", "P", "M", "F", "Y", "W", "S", "T", "C", "N", "Q", "K", "R", "H", "D", "E")
+  properties <- c(rep("Non-polar\naliphatic", 7), rep("Aro-\nmatic", 3), rep("Polar\nuncharged", 5), rep("Pos", 3), rep("Neg", 2))
+
+  properties_table <- data.frame(AA = amino_acids, Property = properties)
 
   # Create an empty data frame to store the mutations
   mutations <- data.frame(REF = character(0), ALT = character(0))
@@ -71,22 +78,65 @@ nonsyn_syn_exp <- function(muts, CDS, reps, n) {
       mutated_protein <- seqinr::translate(mutated_sequence)
 
       # 7. Compare the two sequences
-      difference <- paste0(original_protein, collapse="") != paste0(mutated_protein, collapse="")
+      non_syn <- paste0(original_protein, collapse="") != paste0(mutated_protein, collapse="")
+
+      # Break random_seq into codons
+      codons <- sapply(seq(1, length(random_seq), by=3), function(x) paste0(random_seq[x:(x+2)], collapse=""))
+
+      # Identify which codon the selected_ref belongs to
+      codon_index <- ceiling(pos / 3)
+      ref_codon <- codons[codon_index]
+
+      # Identify the amino acid of ref_codon
+      ref_AA <- seqinr::translate(unlist(strsplit(ref_codon, split="")))
+
+      # Identify which position (1, 2, or 3) the mutation site belongs to
+      ref_codon_pos <- pos - (3 * (codon_index - 1))
+
+      # Identify the new codon after mutation
+      mut_codon <- ref_codon
+      substr(mut_codon, ref_codon_pos, ref_codon_pos) <- mutated_base
+
+      # Identify the amino acid of mut_codon
+      mut_AA <- seqinr::translate(unlist(strsplit(mut_codon, split="")))
+
+
+      REF_AA_Property<-properties_table$Property[match(ref_AA, properties_table$AA)]
+      mut_AA_Property<-properties_table$Property[match(mut_AA, properties_table$AA)]
+
+
+      # Add these as columns to rep_results
+      rep_results <- data.table(
+        mut = paste(selected_ref, mutated_base, sep=">"),
+        seq_name = random_seq_name,
+        selected_ref,
+        mutated_base,
+        ref_codon,
+        ref_AA,
+        REF_AA_Property,
+        ref_codon_pos,
+        mut_codon,
+        mut_AA,
+        mut_AA_Property,
+        non_syn,
+        Property_mut=REF_AA_Property!=mut_AA_Property
+      )
 
       # Store results
-      results[[i]] <- data.table(mut=paste(selected_ref, mutated_base, sep=">"), seq_name = random_seq_name, selected_ref, mutated_base, difference)
+      results[[i]] <- rep_results
 
       # Update the progress bar
     }
 
     final_results <- rbindlist(results)
 
-    ns_s <- data.table(table(mut=final_results$mut, ns=final_results$difference))
+    ns_s <- data.table(table(mut=final_results$mut, ns=final_results$non_syn))
     wide_ns_s <- dcast(ns_s, mut ~ ns, value.var = "N")
+    wide_ns_s$Total<-wide_ns_s$`TRUE`+wide_ns_s$`FALSE`
     wide_ns_s$NS_S = wide_ns_s$`TRUE`/wide_ns_s$`FALSE`
     wide_ns_s$rep=rep
 
-    ns_s_rate <- table(final_results$difference)[2]/table(final_results$difference)[1]
+    ns_s_rate <- table(final_results$non_syn)[2]/table(final_results$non_syn)[1]
 
     all_results$simmuts[[rep]] <-  final_results
     all_results$reps[[rep]] <-  wide_ns_s
