@@ -16,6 +16,7 @@
 #' CDS <- read.fasta("~/Documents/TAIR10_cds_20110103_representative_gene_model_updated.txt")
 #' result <- nonsyn_syn_exp(muts, CDS, 10, 1000)
 #'
+#'
 nonsyn_syn_exp <- function(muts, CDS, reps, n) {
 
   nucleotides <- c("A", "T", "C", "G")
@@ -46,9 +47,11 @@ nonsyn_syn_exp <- function(muts, CDS, reps, n) {
   results <- list()
 
   all_results <- list(simmuts=list(), reps=list(), ratio=numeric())
+  # Add a progress bar
+  pb <- txtProgressBar(min = 0, max = reps, style = 3)
 
   for (rep in 1:reps) {
-    message(rep)
+    #message(rep)
     results <- list()
 
     for (i in 1:n) {
@@ -125,7 +128,7 @@ nonsyn_syn_exp <- function(muts, CDS, reps, n) {
       # Store results
       results[[i]] <- rep_results
 
-      # Update the progress bar
+
     }
 
     final_results <- rbindlist(results)
@@ -141,7 +144,12 @@ nonsyn_syn_exp <- function(muts, CDS, reps, n) {
     all_results$simmuts[[rep]] <-  final_results
     all_results$reps[[rep]] <-  wide_ns_s
     all_results$ratio[rep] = ns_s_rate
+
+    # Update the progress bar
+    setTxtProgressBar(pb, rep)
   }
+  # Close the progress bar
+  close(pb)
 
   all_results
 }
