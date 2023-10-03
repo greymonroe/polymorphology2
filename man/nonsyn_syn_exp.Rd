@@ -26,4 +26,6 @@ based on a given mutation dataset and a coding sequence.
 muts <- fread("~/Dropbox/Research/rice mutation paper/data/Strelka2_mutations.csv")[trt=="MSH6"]
 CDS <- read.fasta("~/Documents/TAIR10_cds_20110103_representative_gene_model_updated.txt")
 result <- nonsyn_syn_exp(muts, CDS, 10, 1000)
+
+
 }
