@@ -24,7 +24,7 @@
 #' @importFrom ggplot2 ggplot aes geom_bar coord_flip labs theme_minimal
 #' @importFrom randomForest importance
 #' @importFrom data.table data.table
-plot_rf_importance <- function(rf_model) {
+plot_rf_importance<-function(rf_model) {
   # Extract importance scores
   importance_data <- as.data.frame(importance(rf_model))
 
@@ -32,14 +32,26 @@ plot_rf_importance <- function(rf_model) {
   importance_data$Variable <- rownames(importance_data)
 
   # Sort by importance
-  importance_data <- importance_data[order(importance_data$MeanDecreaseGini, decreasing = TRUE), ]
+  if("MeanDecreaseGini" %in% colnames(importance_data)){
+    importance_data <- importance_data[order(importance_data$MeanDecreaseGini, decreasing = TRUE), ]
+    # Create a horizontal bar plot
+    p <- ggplot(importance_data, aes(x = reorder(Variable, MeanDecreaseGini), y = MeanDecreaseGini)) +
+      geom_bar(stat = "identity") +
+      coord_flip() +
+      labs(x = "Feature", y = "Importance Score", title = "Random Forest Feature Importance") +
+      theme_minimal(base_size = 6)
+  } else {
+    importance_data <- importance_data[order(importance_data$IncNodePurity, decreasing = TRUE), ]
+    # Create a horizontal bar plot
+    p <- ggplot(importance_data, aes(x = reorder(Variable, IncNodePurity), y = IncNodePurity)) +
+      geom_bar(stat = "identity") +
+      coord_flip() +
+      labs(x = "Feature", y = "Importance Score", title = "Random Forest Feature Importance") +
+      theme_minimal(base_size = 6)
+  }
 
-  # Create a horizontal bar plot
-  p <- ggplot(importance_data, aes(x = reorder(Variable, MeanDecreaseGini), y = MeanDecreaseGini)) +
-    geom_bar(stat = "identity") +
-    coord_flip() +
-    labs(x = "Feature", y = "Importance Score", title = "Random Forest Feature Importance") +
-    theme_minimal()
+
 
   return(list(importance_data=data.table(importance_data), plot=p))
 }
+

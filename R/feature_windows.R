@@ -43,12 +43,12 @@ feature_windows <- function(features, breaks, dist, directed, IDcol){
   }
 
   # Create progress bar
-  #pb <- txtProgressBar(min = 0, max = nrow(features), style = 3)
+  pb <- txtProgressBar(min = 0, max = nrow(features), style = 3)
 
   windows <- rbindlist(apply(features, 1, function(x) {
 
     # Update progress bar
-    #setTxtProgressBar(pb, which(features[[IDcol]] == x[IDcol]))
+    setTxtProgressBar(pb, which(features[[IDcol]] == x[IDcol]))
 
     chrom = x["CHROM"]
     body_starts = round(seq(as.numeric(x["START"]), as.numeric(x["STOP"]), length.out=breaks+1)[-(breaks+1)])
@@ -85,7 +85,7 @@ feature_windows <- function(features, breaks, dist, directed, IDcol){
   }), fill=TRUE)
 
   # Close progress bar
-  #close(pb)
+  close(pb)
 
   # Add 'ID' column
   windows[, ID := 1:.N]

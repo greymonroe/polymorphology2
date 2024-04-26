@@ -65,7 +65,8 @@ sites_in_features <- function(features, sites, mode, value = NULL) {
   }
 
   # Add START and STOP columns to the sites data.table
-  sites[, c("START", "STOP") := .(POS, POS)]
+  sites$START<-sites$POS
+  sites$STOP<-sites$POS
 
   features$CHROM<-as.character(features$CHROM)
   sites$CHROM<-as.character(sites$CHROM)

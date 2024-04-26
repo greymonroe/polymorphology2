@@ -41,6 +41,9 @@ tricontexts <- function(sites, fasta) {
       return(NA)
     }
 
+    if(pos>length(fasta[[chr]])){
+      stop(paste("row",i,"POS is larger than chromosome length in fasta"))
+    }
     up <- toupper(paste0(fasta[[chr]][(pos-1)], collapse = ""))
     down <- toupper(paste0(fasta[[chr]][(pos+1)], collapse = ""))
     context <- paste0(up,"[",ref,">",alt,"]", down)

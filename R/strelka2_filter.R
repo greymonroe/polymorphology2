@@ -23,14 +23,17 @@ strelka2_filter <- function(directory, output) {
     mutations <- rbindlist(lapply(tumors, function(tumor){
       if (norm != tumor){
         message("\tComparing with tumor sample: ", tumor)
+        vcf_file<-paste0(directory, norm, "/", tumor, "/results//variants/somatic.snvs.vcf.gz")
+        if(file.exists(vcf_file)){
         calls <- read.VCF(paste0(directory, norm, "/", tumor, "/results//variants/somatic.snvs.vcf.gz"), caller = "strelka2")
+        } else return(NULL)
         calls[, c("NORMAL_SAMPLE", "TUMOR_SAMPLE") := .(norm, tumor)]
         return(calls)
       }
     }))
 
     message("Processing mutations for sample: ", norm)
-    mutations[, unique := paste(CHROM, POS, sep = "_")]
+    mutations[, unique := paste(CHROM, POS, ALT, sep = "_")]
     mutations[, Mut_N := .N, by = .(unique)]
     return(mutations)
   }))
@@ -42,16 +45,17 @@ strelka2_filter <- function(directory, output) {
     warning("The file already exists. Overwriting...")
   }
 
-  message("Writing all calls to the output file...")
-  fwrite(results, paste0(output, "/strelka2_all_calls.csv"))
-
   results[, unique2 := paste(unique, TUMOR_SAMPLE, sep = "_")]
   results[, results_N := .N, by = .(unique2)]
 
-  message("Applying filters...")
-  PASS <- results[Mut_N == 1 & CHROM %in% 1:5 & FILTER == "PASS"]
+  message("Writing all calls to the output file...")
+  fwrite(results, paste0(output, "/strelka2_all_calls.csv"))
 
-  PASS[, unique2 := paste(unique, TUMOR_SAMPLE, sep = "_")]
+
+
+  message("Applying filters...")
+  PASS <- results[Mut_N == 1 & FILTER == "PASS"]
+
   PASS[, N := .N, by = .(unique2)]
 
   PASS <- PASS[N == length(normals) - 1]
@@ -64,7 +68,7 @@ strelka2_filter <- function(directory, output) {
   PASS[, tumor_depth := tumor_ref_depth + tumor_alt_depth]
   PASS[, depth_pct := tumor_alt_depth / tumor_depth]
 
-  PASS <- unique(PASS[, .(CHROM, POS, REF, ALT, TUMOR_SAMPLE, unique, unique2, tumor_alt_depth, tumor_depth, depth_pct, N, EVS = mean(EVS))])
+  PASS <- unique(PASS[, .(CHROM, POS, REF, ALT, TUMOR_SAMPLE, unique, tumor_alt_depth, tumor_depth, depth_pct, N, EVS = mean(EVS)), by=unique2])
 
   message("Calculating Chi-square tests and distances...")
   PASS[, chi := apply(.SD, 1, function(x) chisq.test(c(as.numeric(x["tumor_alt_depth"]), as.numeric(x["tumor_depth"]) - as.numeric(x["tumor_alt_depth"])))$p.value)]

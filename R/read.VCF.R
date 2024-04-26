@@ -30,7 +30,7 @@ read.VCF <- function(file, caller){
 
   # If the caller is Strelka2, add the EVS information to the output
   if(caller == "strelka2"){
-    variants$EVS <- as.numeric(gsub(".+SomaticEVS=", "", variants$INFO))
+    variants$EVS <- as.numeric(gsub(".+SomaticEVS=", "", gsub(";OVERLAP","",variants$INFO)))
   }
 
   variants$POS<-as.numeric(variants$POS)

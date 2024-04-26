@@ -26,12 +26,11 @@
 #' @keywords genomics
 
 features_in_sites <- function(features, sites) {
-
   # Check if necessary columns exist in input data.tables
-  if (any(setdiff(c("CHROM", "START", "STOP"), colnames(features)))){
+  if (length(setdiff(c("CHROM", "START", "STOP"), colnames(features))) > 0){
     stop("features data.table needs to have CHROM, START, and STOP columns.")
   }
-  if (any(setdiff(c("CHROM", "POS", "ID"), colnames(sites)))){
+  if (length(setdiff(c("CHROM", "POS", "ID"), colnames(sites))) > 0){
     stop("sites data.table needs to have CHROM, POS, and ID columns.")
   }
 
