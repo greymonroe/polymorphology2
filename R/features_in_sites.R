@@ -36,7 +36,8 @@ features_in_sites <- function(features, sites) {
 
   # If 'features' contains 'ID', remove it
   if ("ID" %in% colnames(features)) {
-    features[, ID := NULL]
+    #features[, ID := NULL]
+    features$ID<-NULL
   }
 
   # Add feature_ID to features data.table

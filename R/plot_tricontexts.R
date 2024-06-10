@@ -55,6 +55,16 @@ plot_tricontexts <- function(contexts, full = TRUE, trimer_freq=NULL) {
 
     context_table <- data.table(table(context = c(base_muts, paste(substr(contexts, 2,2), substr(contexts, 6,6), sep = ">"))))
     context_table[, N := N - 1]
+    if(!is.null(trimer_freq)){
+      genes_monoN<-trimer_freq
+      genes_monoN$TRI<-substr(genes_monoN$TRI, 2, 2)
+      genes_monoN<-genes_monoN[TRI %in% c("A","T","C","G")]
+      genes_monoN$grp<-ifelse(genes_monoN$TRI %in% c("C","G"), "C","T")
+      genes_monoN<-genes_monoN[,.(N=sum(N)), by=.(TRI=grp)]
+
+      context_table$TRI_N<-genes_monoN$N[match(substr(context_table$context, 1, 1), genes_monoN$TRI)]
+      context_table$N<-context_table$N/context_table$TRI_N
+    }
     plot <- ggplot(context_table, aes(x = context, y = N, fill = context)) +
       geom_bar(stat = "identity", width = 0.5, col = "black") +
       theme_classic(base_size = 6) +

@@ -14,7 +14,9 @@
 
 nonsyn_syn_exp3 <- function(muts, genome, CDS, reps) {
 
+  message("Calculating base pair frequencies from genome...")
   bp_freq<-rbindlist(lapply(1:length(genome), function(i){
+    message(paste("\tChr",i))
     bp_freq<-data.table(table(REF=genome[[i]]))[REF!="n"]
     bp_freq$REF<-toupper(bp_freq$REF)
     return(bp_freq)
@@ -29,7 +31,11 @@ unique_refs <- unique(mutations$REF)
 ref_probs <- sapply(unique_refs, function(ref) sum(mutations[REF == ref, PROB]))
 ref_probsdt<-data.table(REF=names(ref_probs), PROB=ref_probs)
 
-CDS_dt_all<-rbindlist(lapply(sample(1:length(CDS), reps), function(prot){
+message("Probabilistic sampling of coding region mutations...")
+
+pb <- txtProgressBar(min = 0, max = reps, style = 3)
+CDS_dt_all<-rbindlist(lapply(1:reps, function(i){
+  prot<-sample(1:length(CDS), 1, replace = T)
   random_seq<-toupper(CDS[[prot]])
   CDS_dt<-data.table(POS=1:length(random_seq), REF=random_seq)
   CDS_dt<-merge(CDS_dt, mutations[,.(REF, ALT, PROB)], by="REF",  allow.cartesian=TRUE)[order(POS),.(MUT=.I, POS, REF, ALT, PROB=prop.table(PROB))]
@@ -49,7 +55,9 @@ CDS_dt_all<-rbindlist(lapply(sample(1:length(CDS), reps), function(prot){
     non_syn <- paste0(original_protein, collapse="") != paste0(mutated_protein, collapse="")
     non_syn<-ifelse(non_syn, "Non-Synonymous","Synonymous")
   })
+  setTxtProgressBar(pb, i)
   return(mutation)
+
 }))
 
 }
