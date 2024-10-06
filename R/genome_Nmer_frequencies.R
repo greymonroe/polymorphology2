@@ -26,7 +26,7 @@
 #' @export
 genome_Nmer_frequencies <- function(genome, Nmer, stop = NULL) {
 
-  stop <- if(is.null(stop)) length(genome[[n]]) else min(stop, length(genome[[n]]))
+  #stop <- if(is.null(stop)) length(genome[[n]]) else min(stop, length(genome[[n]]))
 
   genome_features <- rbindlist(lapply(names(genome), function(n) {
     chr <- genome[[n]]
@@ -41,6 +41,6 @@ genome_Nmer_frequencies <- function(genome, Nmer, stop = NULL) {
   genome_features_trimer_total <- rbindlist(lapply(1:length(genome_features_trimer), function(x){
     data.table(context=names(genome_features_trimer)[x], N=sum(genome_features_trimer[,..x]))
   }))
-  genome_features_trimer_total<-genome_features_trimer_total[!grepl("ID|N", context)]
+  genome_features_trimer_total<-genome_features_trimer_total[!grepl("ID|N|V", context)]
   return(genome_features_trimer_total)
 }
