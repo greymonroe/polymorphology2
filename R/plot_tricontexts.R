@@ -43,7 +43,7 @@ plot_tricontexts <- function(contexts, full = TRUE, trimer_freq=NULL, x_text=T) 
       context_table$TRI_N<-trimer_freq$N[match(context_table$context_only, trimer_freq$TRI)]
       context_table$N<-context_table$N/context_table$TRI_N
     }
-    context_table$N<-prop.table(context_table$N)
+    context_table$N<-prop.table(context_table$N)*100
     plot <- ggplot(context_table, aes(x = context_only, y = N, fill = mut)) +
       geom_bar(stat = "identity", width = 0.5) +
       facet_grid(. ~ mut, scales = "free") +
@@ -52,7 +52,8 @@ plot_tricontexts <- function(contexts, full = TRUE, trimer_freq=NULL, x_text=T) 
       scale_y_continuous("% SBS")+
       theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), legend.key.size = unit(x = 0.3, units = "line"),
             strip.text = element_text(face = "bold"),
-            strip.background = element_blank()) +
+            strip.background = element_blank(),
+            panel.spacing = unit(0, "lines")) +
       scale_fill_manual(values = c("cyan3","black","red4","gray","green3","pink3"), guide = "none")
   } else {
 
@@ -78,7 +79,7 @@ plot_tricontexts <- function(contexts, full = TRUE, trimer_freq=NULL, x_text=T) 
       scale_fill_manual(values = c(`C>A`="cyan3",`C>G`="black",`C>T`="red4",`T>A`="gray",`T>C`="green3",`T>G`="pink3"), guide = "none")
   }
   if(!x_text){
-    plot<-plot+theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
+    plot<-plot+theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), axis.title.x = element_blank())
   }
   return(list(context_table = context_table, plot = plot))
 }
