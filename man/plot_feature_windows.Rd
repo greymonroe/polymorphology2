@@ -4,7 +4,7 @@
 \alias{plot_feature_windows}
 \title{Plot Variable in Relation to Features}
 \usage{
-plot_feature_windows(feature_windows, variable, mode)
+plot_feature_windows(feature_windows, variable, mode, style = "line")
 }
 \arguments{
 \item{feature_windows}{A `data.table` object created by the `feature_windows` function. It should include the columns "REGION", "RELATIVEPOS", and "LENGTH".}
@@ -12,6 +12,8 @@ plot_feature_windows(feature_windows, variable, mode)
 \item{variable}{A string specifying the name of the column in the `feature_windows` data.table to be plotted.}
 
 \item{mode}{A string specifying the mode of calculation: "mean" for mean of the variable, "percent" for the sum of the variable values divided by the total length.}
+
+\item{style}{A string specifying the style of plot: "line" default, or "bar"}
 }
 \value{
 A `ggplot` object representing the plot of the variable in relation to features.

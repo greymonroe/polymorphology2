@@ -4,10 +4,12 @@
 \alias{real_sci_format}
 \title{Format numbers with real scientific notation}
 \usage{
-real_sci_format(x)
+real_sci_format(x, signif_N = NULL)
 }
 \arguments{
 \item{x}{A numeric vector of values to be formatted.}
+
+\item{signif_N}{A numeric value for rounding small values to signif_N digits with signif, default is NULL}
 }
 \value{
 An expression vector with numbers formatted in scientific notation suitable for plot rendering.
