@@ -30,10 +30,11 @@
 #' summarize_DT(DT, SDcols = c("value1", "value2"), BYcols = "id")
 #'
 #' @export
+#'
 summarize_DT <- function(DT, SDcols, BYcols) {
-  DT[, c(setNames(lapply(.SD, mean), paste0(names(.SD), "_mean")),
-         setNames(lapply(.SD, median), paste0(names(.SD), "_median")),
-         setNames(lapply(.SD, function(x) sd(x) / sqrt(.N)), paste0(names(.SD), "_se")),
-         .(N = .N)),  # Add the count per group
+  DT[, c(setNames(lapply(.SD, function(x) mean(x, na.rm = TRUE)), paste0(names(.SD), "_mean")),
+         setNames(lapply(.SD, function(x) median(x, na.rm = TRUE)), paste0(names(.SD), "_median")),
+         setNames(lapply(.SD, function(x) sd(x, na.rm = TRUE) / sqrt(sum(!is.na(x)))), paste0(names(.SD), "_se")),  # Adjust SE for non-NA values
+         .(N = .N)),  # Add the total count per group (including NA)
      by = BYcols, .SDcols = SDcols]
 }
