@@ -64,6 +64,9 @@ sites_in_features <- function(features, sites, mode, value = NULL) {
             paste(unmatched, collapse = ", "), ".")
   }
 
+  #store ID vector to reorder result
+  IDorder<-data.table(ID=features$ID)
+
   # Add START and STOP columns to the sites data.table
   sites$START<-sites$POS
   sites$STOP<-sites$POS
@@ -93,5 +96,6 @@ sites_in_features <- function(features, sites, mode, value = NULL) {
     result <- overlaps[, .(mean = mean(get(value), na.rm = TRUE)), by = "ID"]
   }
 
+  result<-merge(IDorder, result, by="ID")
   return(result)
 }

@@ -58,7 +58,7 @@ features_in_features <- function(features, features2, mode, value = NULL) {
 
   # If 'features' contains 'ID', remove it
   if ("ID" %in% colnames(features2)) {
-    features2[, ID := NULL]
+    features2$ID<-NULL
   }
 
   # Remove 'LENGTH' column from 'features' if it exists
@@ -66,6 +66,8 @@ features_in_features <- function(features, features2, mode, value = NULL) {
     features$LENGTH <-NULL
   }
 
+  #store ID vector to reorder result
+  IDorder<-data.table(ID=features$ID)
 
   # Add ID column to the features2 data.table
   features2[, feature2_ID := seq_len(.N)]
@@ -146,6 +148,7 @@ features_in_features <- function(features, features2, mode, value = NULL) {
 
   # Combine results from all chromosomes
   result <- rbindlist(results_list)
+  result<-merge(IDorder, result, by="ID")
 
   return(result)
 }

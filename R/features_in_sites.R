@@ -40,8 +40,12 @@ features_in_sites <- function(features, sites) {
     features$ID<-NULL
   }
 
+
+  #store ID vector to reorder result
+  IDorder<-data.table(ID=sites$ID)
+
   # Add feature_ID to features data.table
-  features[, feature_ID := seq_len(.N)]
+  features$feature_ID <-1:nrow(features)
 
   # Create START and STOP columns in the sites data.table
   sites[, c("START", "STOP") := .(POS, POS)]
@@ -71,6 +75,7 @@ features_in_sites <- function(features, sites) {
 
   # Summarize overlaps for each site
   out <- overlaps[, .(overlaps = any(!is.na(feature_ID))), by = .(ID)]
+  out<-merge(IDorder, out, by="ID")
 
   return(out)
 }

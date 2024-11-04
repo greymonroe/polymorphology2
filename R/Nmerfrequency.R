@@ -32,11 +32,11 @@ Nmerfrequency <- function(features, fasta, Nmer, mode = "prop") {
   Nmer_step=Nmer-1
 
   # Initialize a progress bar
-  pb <- txtProgressBar(min = 0, max = nrow(features), style = 3)
+  #pb <- txtProgressBar(min = 0, max = nrow(features), style = 3)
 
-  out <- rbindlist(lapply(seq_len(nrow(features)), function(i) {
+  out <- rbindlist(pblapply(seq_len(nrow(features)), function(i) {
     # Update the progress bar
-    setTxtProgressBar(pb, i)
+    #setTxtProgressBar(pb, i)
 
     x <- features[i]
     chrom <- x[["CHROM"]]
@@ -77,7 +77,7 @@ Nmerfrequency <- function(features, fasta, Nmer, mode = "prop") {
   }), fill = T)
 
   # Close the progress bar
-  close(pb)
+  #close(pb)
 
   out<-rbind(empty_dt, out, fill=T)
   out[ , names(out) := lapply(.SD, function(x) ifelse(is.na(x), 0, x))]

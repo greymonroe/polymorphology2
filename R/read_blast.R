@@ -11,6 +11,7 @@
 #' blast_results <- read_blast('sample_blast_output.txt')
 #'
 #' @import data.table
+#' @export
 read_blast <- function(file) {
   # Ensure data.table library is loaded
   require(data.table)

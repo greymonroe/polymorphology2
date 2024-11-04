@@ -14,7 +14,7 @@
 #' # genes_of_interest <- extract_genes_for_go_term(GOdata, "GO:0030941", gene_list)
 #'
 #' @export
-extract_genes_for_go_term <- function(GOdata, go_term_of_interest, gene_list) {
+GO_extract_genes_for_go_term <- function(GOdata, go_term_of_interest, gene_list) {
 
   # Step 2: Extract the genes associated with this GO.ID from the topGOdata object
   genes_in_go_term <- genesInTerm(GOdata, go_term_of_interest)

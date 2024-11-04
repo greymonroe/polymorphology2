@@ -21,19 +21,20 @@ read.GFF <- function(file_path) {
   cmd_string <- paste0("grep -v '^#' ", file_path)
 
   # Read the file
-  dt <- data.table::fread(cmd = cmd_string, header = FALSE)
+  dt <- data.table::fread(cmd = cmd_string, header = FALSE, blank.lines.skip = TRUE)
   # Check the number of columns
-  if(ncol(dt) != 9){
-    stop("Unexpected number of columns in the GFF file")
-  }
+  if(ncol(dt) == 9){
+    # Assign column names
+    colnames(dt)[1:9] <- c("CHROM","SOURCE","TYPE","START","STOP","SCORE","DIRECTION","PHASE","INFO")
 
-  # Assign column names
-  colnames(dt)[1:9] <- c("CHROM","SOURCE","TYPE","START","STOP","SCORE","DIRECTION","PHASE","INFO")
+    # Check if START and STOP columns are numeric
+    if(!is.numeric(dt$START) | !is.numeric(dt$STOP)){
+      stop("START and STOP columns should be numeric")
+    }
 
-  # Check if START and STOP columns are numeric
-  if(!is.numeric(dt$START) | !is.numeric(dt$STOP)){
-    stop("START and STOP columns should be numeric")
-  }
+
+  } else("Unexpected number of columns in the GFF file")
+
 
   return(dt)
 }
