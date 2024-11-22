@@ -17,7 +17,7 @@
 GO_extract_genes_for_go_term <- function(GOdata, go_term_of_interest, gene_list) {
 
   # Step 2: Extract the genes associated with this GO.ID from the topGOdata object
-  genes_in_go_term <- genesInTerm(GOdata, go_term_of_interest)
+  genes_in_go_term <- topGO::genesInTerm(GOdata, go_term_of_interest)
 
   # Step 3: Filter the genes to include only those that are in your gene_list
   genes_of_interest_in_go <- intersect(genes_in_go_term[[go_term_of_interest]], gene_list)

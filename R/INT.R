@@ -20,7 +20,13 @@
 #' hist(transformed_x, main = "INT Transformed Data", col = "skyblue")
 #' @export
 INT <- function(x) {
-  ranked <- rank(x, ties.method = "average")
-  int_transformed <- qnorm((ranked - 0.5) / length(x))
-  return(int_transformed)
+  valid_x <- x[!is.na(x)]  # Remove NA values
+  ranked <- rank(valid_x, ties.method = "average")
+  int_transformed <- qnorm((ranked - 0.5) / length(valid_x))
+
+  # Create a result vector matching the original input size
+  result <- rep(NA, length(x))
+  result[!is.na(x)] <- int_transformed
+
+  return(result)
 }
