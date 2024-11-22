@@ -42,7 +42,7 @@ genome_Nmer_frequencies <- function(genome, Nmer, stop = NULL) {
     data.table(context=names(genome_features_trimer)[x], N=sum(genome_features_trimer[,..x]))
   }))
   genome_features_trimer_total<-genome_features_trimer_total[!grepl("ID|N|V|Y|W|R|M|K|S", context)]
-  genome_features_trimer_total$TRIgenome_features_trimer_totalgenom_tri$context
+  genome_features_trimer_total$TRI<-genome_features_trimer_totalgenom_tri$context
   genome_features_trimer_total<-genome_features_trimer_total[1:64]
   return(genome_features_trimer_total)
 }
