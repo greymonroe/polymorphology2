@@ -42,7 +42,7 @@ homopolymer_var_annotate <- function(sites, homopolymers, size, dist){
   homopolymers$startminus <- homopolymers$START - dist
   homopolymers$endplus <- homopolymers$STOP + dist
   homopolymers$CHROM<-as.character(homopolymers$CHROM)
-
+  homopolymers<-homopolymers[LENGTH>=size]
 
   # Set keys for overlap matching
   data.table::setkey(homopolymers, CHROM, startminus, endplus)
