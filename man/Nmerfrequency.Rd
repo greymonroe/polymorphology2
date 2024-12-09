@@ -4,7 +4,14 @@
 \alias{Nmerfrequency}
 \title{N-mer Frequency}
 \usage{
-Nmerfrequency(features, fasta, Nmer, mode = "prop")
+Nmerfrequency(
+  features,
+  fasta,
+  Nmer,
+  mode = "prop",
+  parallel = TRUE,
+  chunk_size = 500
+)
 }
 \arguments{
 \item{features}{A `data.table` containing genomic features. It must include the columns "CHROM", "START", "STOP", and "ID".}
@@ -14,6 +21,8 @@ Nmerfrequency(features, fasta, Nmer, mode = "prop")
 \item{Nmer}{numeric value (2 would give dimers, 3 would give trimers, etc)}
 
 \item{mode}{a string that can be either "prop" or "counts" to return either Nmer frequencies as total numbers or proportions.}
+
+\item{chunk_size}{an integer, the number of rows per chunk for faster processing and lower memory use}
 }
 \value{
 A `data.table` containing the frequency of each N-mer for each genomic feature.
