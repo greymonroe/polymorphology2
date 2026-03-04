@@ -135,7 +135,7 @@ features_in_features <- function(features, features2, mode, value = NULL) {
       } else if (mode == "sum") {
         result <- overlaps[, .(sum = sum(get(value), na.rm = TRUE)), by = .(ID)]
       } else if (mode == "sumxlength") {
-        result <- overlaps[, .(sumxlength = sum(.SD[[1]], na.rm = TRUE) * sum(LENGTH, na.rm = TRUE)),
+        result <- overlaps[, .(sumxlength = sum(.SD[[1]] * LENGTH, na.rm = TRUE)),
                            by = .(ID), .SDcols = value]
       }
     } else if (mode == "length") {

@@ -18,14 +18,13 @@ trimerfrequencycomp <- function(Nmerfrequencytable) {
 
   all_trimers <- do.call(paste0, expand.grid(rep(list(c("A", "T", "C", "G")), 3)))
 
-  comptrimers <- c("ACA","ACC","ACG","ACT","ACA","ACC","ACG","ACT","ACA","ACC","ACG","ACT",
-                   "ATA","ATC","ATG","ATT","ATA","ATC","ATG","ATT","ATA","ATC","ATG","ATT",
-                   "CCA","CCC","CCG","CCT","CCA","CCC","CCG","CCT","CCA","CCC","CCG","CCT",
-                   "CTA","CTC","CTG","CTT","CTA","CTC","CTG","CTT","CTA","CTC","CTG","CTT",
-                   "GCA","GCC","GCG","GCT","GCA","GCC","GCG","GCT","GCA","GCC","GCG","GCT",
-                   "GTA","GTC","GTG","GTT","GTA","GTC","GTG","GTT","GTA","GTC","GTG","GTT",
-                   "TCA","TCC","TCG","TCT","TCA","TCC","TCG","TCT","TCA","TCC","TCG","TCT",
-                   "TTA","TTC","TTG","TTT","TTA","TTC","TTG","TTT","TTA","TTC","TTG","TTT")
+  # Trimers with pyrimidine (C or T) at the middle position — the 32 contexts
+  # used for complement-merging in the SBS mutation signature convention
+  comptrimers <- do.call(paste0, expand.grid(
+    c("A","T","C","G"),
+    c("C","T"),
+    c("A","T","C","G")
+  ))
 
   newtable <- data.table(ID = Nmerfrequencytable$ID)
 

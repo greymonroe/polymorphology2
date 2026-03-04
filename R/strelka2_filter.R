@@ -10,9 +10,6 @@
 #' @importFrom data.table rbindlist fread fwrite
 #' @export
 strelka2_filter <- function(directory, output) {
-  # load necessary libraries
-  require(data.table)
-
   bp <- c("A","C","G","T") # base pairs
 
   normals <- list.files(directory, full.names = FALSE)

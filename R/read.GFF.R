@@ -33,7 +33,7 @@ read.GFF <- function(file_path) {
     }
 
 
-  } else("Unexpected number of columns in the GFF file")
+  } else stop("Unexpected number of columns in the GFF file")
 
 
   return(dt)

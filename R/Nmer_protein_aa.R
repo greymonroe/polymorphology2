@@ -13,19 +13,16 @@
 #' proteins <- read.fasta("~/Documents/TAIR10_pep_20101214_updated")
 #' Nmer_protein_aa(proteins, Nmer = 2, mode = "counts")
 
-Nmer_protein_aa <- function(proteins, Nmer, mode) {
-  require(data.table)
-  require(seqinr)
-
+Nmer_protein_aa <- function(proteins, Nmer, mode, quiet = FALSE) {
   Nmer_step <- Nmer - 1
   amino_acids <- c("A", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "V", "W", "Y")
   motifs <- do.call(paste0, expand.grid(rep(list(amino_acids), Nmer)))
 
   total <- length(proteins)
-  pb <- txtProgressBar(min = 0, max = total, style = 3)
+  if (!quiet) pb <- txtProgressBar(min = 0, max = total, style = 3)
 
   results <- rbindlist(lapply(1:total, function(i) {
-    setTxtProgressBar(pb, i)
+    if (!quiet) setTxtProgressBar(pb, i)
     seq <- toupper(paste0(unlist(proteins[[i]]), collapse = ""))
 
     walk <- sapply(Nmer:nchar(seq), function(j) {
@@ -50,7 +47,7 @@ Nmer_protein_aa <- function(proteins, Nmer, mode) {
     return(rotated_dt)
   }), fill = TRUE)
 
-  close(pb)
+  if (!quiet) close(pb)
 
   results <- results[, c("Protein", setdiff(names(results), "Protein")), with=F]
 

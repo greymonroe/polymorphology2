@@ -12,7 +12,7 @@
 #' @export
 
 
-Nmerfrequency <- function(features, fasta, Nmer, mode = "prop", parallel = TRUE, chunk_size = 500) {
+Nmerfrequency <- function(features, fasta, Nmer, mode = "prop", parallel = F, chunk_size = 500) {
   required_cols <- c("CHROM", "START", "STOP", "ID")
   if (any(!(required_cols %in% colnames(features)))) {
     stop(paste("Features must contain the columns:", paste(required_cols, collapse = ", ")))
@@ -35,14 +35,14 @@ Nmerfrequency <- function(features, fasta, Nmer, mode = "prop", parallel = TRUE,
     start <- as.numeric(x[["START"]])
     stop <- as.numeric(x[["STOP"]])
 
-    seq <- toupper(fasta[[chrom]][start:stop])  # Faster substring extraction
     if (Nmer > 1) {
       seq <- toupper(paste0(unlist(fasta[[chrom]][start:stop]), collapse = ""))
-      walk<-sapply(Nmer:nchar(seq), function(i){
+      walk <- sapply(Nmer:nchar(seq), function(i){
         substr(seq, i-Nmer_step, i)
-      }) } else {
-        walk <- seq
-      }
+      })
+    } else {
+      walk <- toupper(fasta[[chrom]][start:stop])
+    }
 
     walk_table <- as.data.table(table(walk))
     if (mode == "prop") {

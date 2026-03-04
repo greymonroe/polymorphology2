@@ -7,14 +7,16 @@ Maintainer: Grey Monroe <greymonroe@gmail.com>
 Description: Provides wrapper functions for genomic data analysis, enabling the study of polymorphisms in relation to genome features such as gene bodies, SBS profiles of mutations, and epigenome enrichments. Also contains other various functions that we find useful.
 License: GPL-3
 Encoding: UTF-8
-Depends: 
-    R (>= 3.6.0),
+Depends:
+    R (>= 4.0.0)
+Imports:
     data.table,
     ggplot2,
     seqinr,
     vcfR,
     stringr,
     Hmisc,
+    MASS,
     randomForest,
     pbapply,
     topGO

@@ -13,9 +13,6 @@
 #' @import data.table
 #' @export
 read_blast <- function(file) {
-  # Ensure data.table library is loaded
-  require(data.table)
-
   # Read the file
   blast <- fread(file, header = FALSE)
 

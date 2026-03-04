@@ -52,15 +52,10 @@ homopolymer_var_annotate <- function(sites, homopolymers, size, dist){
   data.table::setkey(sites, CHROM, START, STOP)
 
   # Identify overlaps between sites and homopolymers
+  overlap <- data.table::foverlaps(sites, homopolymers)
 
-  overlap_sums<-rbindlist(lapply(unique(sites$CHROM), function(c){
-    message("CHROM", c)
-    overlap <- data.table::foverlaps(sites[CHROM==c], homopolymers[CHROM==c])
-
-    # Summarize overlap information
-    overlap_sum <- overlap[toupper(ALT) == toupper(BP), .(homopolymer_neighbor = sum(!is.na(BP)) > 0), by = ID]
-
-  }))
+  # Summarize overlap information
+  overlap_sums <- overlap[toupper(ALT) == toupper(BP), .(homopolymer_neighbor = sum(!is.na(BP)) > 0), by = ID]
 
 
   # Annotate sites with overlap information

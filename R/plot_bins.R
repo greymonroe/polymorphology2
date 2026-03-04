@@ -28,9 +28,6 @@
 #' }
 #'
 plot_bins <- function(data, yvar, xvar, bins, xaxis = "numeric") {
-  require(ggplot2)
-  require(data.table)
-
   bins_data <- data[is.finite(get(yvar)), .(y = mean(get(yvar), na.rm=T), y_se = sd(get(yvar), na.rm=T) / sqrt(.N), N = .N),
                     by = .(x_cut = cut2(get(xvar), g = bins))]
   bins_data$x_num <- as.numeric(bins_data$x_cut)

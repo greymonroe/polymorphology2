@@ -16,7 +16,7 @@
 #' @export
 #' @examples
 #' # Ensure features is a data.table with proper structure before using this function.
-feature_windows <- function(features, breaks, dist, directed, IDcol){
+feature_windows <- function(features, breaks, dist, directed, IDcol, quiet = FALSE){
 
   # Check if features is a data.table
   if (!is.data.table(features)){
@@ -43,12 +43,12 @@ feature_windows <- function(features, breaks, dist, directed, IDcol){
   }
 
   # Create progress bar
-  pb <- txtProgressBar(min = 0, max = nrow(features), style = 3)
+  if (!quiet) pb <- txtProgressBar(min = 0, max = nrow(features), style = 3)
 
   windows <- rbindlist(apply(features, 1, function(x) {
 
     # Update progress bar
-    setTxtProgressBar(pb, which(features[[IDcol]] == x[IDcol]))
+    if (!quiet) setTxtProgressBar(pb, which(features[[IDcol]] == x[IDcol]))
 
     chrom = x["CHROM"]
     body_starts = round(seq(as.numeric(x["START"]), as.numeric(x["STOP"]), length.out=breaks+1)[-(breaks+1)])
@@ -85,7 +85,7 @@ feature_windows <- function(features, breaks, dist, directed, IDcol){
   }), fill=TRUE)
 
   # Close progress bar
-  close(pb)
+  if (!quiet) close(pb)
 
   # Add 'ID' column
   windows[, ID := 1:.N]
